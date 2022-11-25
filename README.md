@@ -72,7 +72,54 @@ Run the result-app container on port 5001
 docker run -p 5001:80 --link db:db result-app
 ```
 
-_User Docker Compose_
+_User Docker Compose version 1_
+
+- [Install Docker Compose](https://docs.docker.com/compose/install/other/)
+
+- stop all running containers
+
+```
+docker stop container_id
+dockker ps
+```
+
+- Create docker-compose.yml file
+
+```
+#cat > docker-compose.yml
+redis:
+vote:
+db:
+worker:
+result:
+```
+
+- Open docker-compose.yml file with vim and edit it
+
+```
+redis:
+    image: redis
+db:
+    image: postgres:9.4
+vote:
+    image: voting-app
+    ports:
+        - 5000:80
+    links:
+        - redis
+
+worker:
+    image: worker-app
+    links:
+        - db
+        - redis
+result:
+    image: result-app
+    ports:
+        5001:80
+    links:
+        - db
+```
 
 Run in this directory:
 ```
