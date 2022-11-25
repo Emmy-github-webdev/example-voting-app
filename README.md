@@ -125,6 +125,98 @@ Run in this directory:
 ```
 docker-compose up
 ```
+
+
+_User Docker Compose version 3_
+
+- [Install Docker Compose](https://docs.docker.com/compose/install/other/)
+
+- stop all running containers
+
+```
+docker stop container_id
+dockker ps
+```
+
+- Create docker-compose.yml file
+
+```
+#cat > docker-compose.yml
+redis:
+vote:
+db:
+worker:
+result:
+```
+
+- Open docker-compose.yml file with vim and edit it
+
+```
+version: "3"
+services:
+    redis:
+        image: redis
+    db:
+        image: postgres:9.4
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+    vote:
+        image: voting-app
+        ports:
+            - 5000:80
+
+    worker:
+        image: worker-app
+    result:
+        image: result-app
+        ports:
+            5001:80
+```
+
+Run in this directory:
+```
+docker-compose up
+```
+
+### Test
+
+1. First create a redis database container called redis, image redis:alpine.
+
+```
+ $ docker run --name redis -d redis:alpine
+```
+2. Next, create a simple container called clickcounter with the image kodekloud/click-counter, link it to the redis container that we created in the previous task and then expose it on the host port 8085
+
+The clickcounter app run on port 5000.
+if you are unsure, check the hints section for the exact commands.
+
+```
+ $ docker run -d --name=clickcounter --link redis:redis -p 8085:5000 kodekloud/click-counter
+```
+3. Let's clean up the actions carried out in previous steps. Delete the redis and the clickcounter containers.
+
+```
+docker stop e3700 5fc
+docker rm e3700 5fc
+```
+4. Create a docker-compose.yml file under the directory /root/clickcounter. Once done, run docker-compose up.
+
+The compose file should have the exact specification as follows -
+
+redis service specification - Image name should be redis:alpine.
+clickcounter service specification - Image name should be kodekloud/click-counter, app is run on port 5000 and expose it on the host port 8085 in the compose file.
+
+```
+services:
+  redis:
+    image: redis:alpine
+  clickcounter:
+    image: kodekloud/click-counter
+    ports:
+    - 8085:5000
+version: '3.0'
+```
 The app will be running at [http://localhost:5000](http://localhost:5000), and the results will be at [http://localhost:5001](http://localhost:5001).
 
 Alternately, if you want to run it on a [Docker Swarm](https://docs.docker.com/engine/swarm/), first make sure you have a swarm. If you don't, run:
