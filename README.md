@@ -15,6 +15,63 @@ The Linux stack uses Python, Node.js, .NET Core (or optionally Java), with Redis
 
 > If you're using [Docker Desktop on Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), you can run the Linux version by [switching to Linux containers](https://docs.docker.com/docker-for-windows/#switch-between-windows-and-linux-containers), or run the Windows containers version.
 
+
+_Using Docker Run Command_
+
+## Build docker image for voting app
+
+```
+example-voting-app/vote# docker build . -t voting-app
+```
+
+Check if the voting-app is created
+
+```
+docker images
+```
+
+Run the voting-app container on port 5000
+
+```
+docker run -p 5000:80 voting-app
+```
+Run redis container
+```
+example-voting-app/vote# docker run --name=redis redis
+```
+## Build docker image for worker
+
+Run postgress container
+
+```
+example-voting-app/vote# docker run -d --name=db postgres:9.4
+```
+Build worker image
+
+```
+example-voting-app/worker# docker build . -t worker-app
+```
+
+Run the worker-app container
+
+```
+docker run worker-app
+```
+
+## Build docker image for result
+
+
+```
+example-voting-app/result# docker build . -t result-app
+```
+Run the result-app container on port 5001
+
+```
+docker run -p 5001:80 result-app
+```
+
+_User Docker Compose_
+
 Run in this directory:
 ```
 docker-compose up
