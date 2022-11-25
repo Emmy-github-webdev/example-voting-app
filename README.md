@@ -21,6 +21,7 @@ _Using Docker Run Command_
 ## Build docker image for voting app
 
 ```
+example-voting-app$ cd vote
 example-voting-app/vote# docker build . -t voting-app
 ```
 
@@ -37,7 +38,8 @@ docker run -p 5000:80 voting-app
 ```
 Run redis container
 ```
-example-voting-app/vote# docker run --name=redis redis
+example-voting-app/vote# docker run -d --name=redis redis
+docker run -p 5000:80 --link redis:redis voting-app
 ```
 ## Build docker image for worker
 
@@ -55,7 +57,7 @@ example-voting-app/worker# docker build . -t worker-app
 Run the worker-app container
 
 ```
-docker run worker-app
+docker run --link redis:redis --link db:db worker-app
 ```
 
 ## Build docker image for result
@@ -67,7 +69,7 @@ example-voting-app/result# docker build . -t result-app
 Run the result-app container on port 5001
 
 ```
-docker run -p 5001:80 result-app
+docker run -p 5001:80 --link db:db result-app
 ```
 
 _User Docker Compose_
